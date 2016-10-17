@@ -39,11 +39,15 @@ Additional features are implemented:
 ## Video Walkthrough 
 
 Here's a walkthrough of implemented user stories:  
-<img src='LiceCapGifs/overview.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />  
+<img src='LiceCapGifs/overview.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />   
+
 When there is a network issue (e.g. no WIFI), a "Network Error" message will be shown. And after the user connects with the internet again and does a refresh, all contents will be loaded and the error message will disappear.   
 <img src='LiceCapGifs/network_issue.gif' title='Network Issue' width='' alt='Network Issue' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
+
+## Notes  
+Would like to work on the unfinished optional and additional features in the near future.  
 
 ## License
 
