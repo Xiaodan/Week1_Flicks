@@ -17,20 +17,34 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     var endpoint: String!
     var refreshControl: UIRefreshControl!
     
+    var errorMsgView = UIView()
+    var errorMsgLabel = UILabel()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         tableView.dataSource = self
         tableView.delegate = self
         
+        // error msg
+        errorMsgView.frame = CGRect(x: 20, y: 64, width: 342, height: 30)
+        errorMsgLabel.frame = CGRect(x: 20, y: 47, width: 342, height: 30)
+        errorMsgView.backgroundColor = UIColor.orange
+        errorMsgLabel.text = "Network Error! :( Check Network Settings. "
+        errorMsgLabel.font = errorMsgLabel.font.withSize(14)
+        errorMsgLabel.sizeToFit()
+        errorMsgLabel.center = CGPoint(x: errorMsgView.frame.width/2, y: errorMsgView.frame.height/2)
+        errorMsgView.insertSubview(errorMsgLabel, at: 0)
+        errorMsgView.isHidden = true
+        UIApplication.shared.keyWindow?.addSubview(errorMsgView)
+        
         refreshControl = UIRefreshControl()
         //refreshControl.addTarget(self, action: Selector("didRefresh"), for: UIControlEvents.valueChanged)
-        refreshControl.addTarget(self, action: #selector(MoviesViewController.didRefresh(refreshControl:)), for: UIControlEvents.valueChanged)
-        tableView.insertSubview(refreshControl, at: 0)
+        refreshControl.addTarget(self, action: #selector(MoviesViewController.didRefresh(_:)), for: UIControlEvents.valueChanged)
+        tableView.insertSubview(refreshControl, at: 1)
         
         // Do any additional setup after loading the view.
         networkRequest()
-        
     }
     
     func networkRequest() {
@@ -39,8 +53,11 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         // add an ! to endpoint
         let url = URL(string:"http://api.themoviedb.org/3/movie/\(endpoint!)?api_key=\(apiKey)")
         let request = URLRequest(url: url!)
+        let sessionConfig = URLSessionConfiguration.default
+        sessionConfig.timeoutIntervalForRequest = 10
+        
         let session = URLSession(
-            configuration: .default,
+            configuration: sessionConfig,
             delegate:nil,
             delegateQueue:OperationQueue.main
         )
@@ -49,8 +66,6 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         MBProgressHUD.showAdded(to: self.view, animated: true)
         
         let task : URLSessionDataTask = session.dataTask(with: request,completionHandler: { (dataOrNil, response, error) in
-            
-           
             
             if let data = dataOrNil {
                 // want it to be used later
@@ -61,21 +76,32 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                     // REMEMBER TO reload data after network requests have been made
                     self.tableView.reloadData()
                     
+                    // Error msg disappears when the internet is back
+                    if(self.errorMsgView.isHidden == false) {
+                        self.errorMsgView.isHidden = true
+                    }
                     // Hide HUD right before the request is made
                     MBProgressHUD.hide(for: self.view, animated: true)
-                    
-                    self.refreshControl.endRefreshing()
                 }
+            } else { // nil data
+                // REMEMBER TO reload data after network requests have been made
+                self.tableView.reloadData()
+                
+                // Hide HUD right before the request is made
+                MBProgressHUD.hide(for: self.view, animated: true)
+                
+                self.errorMsgView.isHidden = false
+                print("There was a network error!")
             }
-        });
+        })
         task.resume()
         
     }
     
-    func didRefresh(refreshControl: UIRefreshControl) {
-        print("did refresh")
+    func didRefresh(_ refreshControl: UIRefreshControl) {
         networkRequest()
-        
+        print("did refresh")
+        self.refreshControl.endRefreshing()
     }
 
     override func didReceiveMemoryWarning() {
@@ -114,10 +140,9 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             cell.posterView.image = nil
         }
         
-        // cell.posterView = setImage
-        
         // cell.textLabel!.text = "row \(indexPath.row)"
         // cell.textLabel!.text = title
+        cell.selectionStyle = .none
         
         // print("row \(indexPath.row)")
         return cell
