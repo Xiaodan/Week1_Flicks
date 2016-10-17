@@ -8,18 +8,25 @@
 
 import UIKit
 import AFNetworking
+import MBProgressHUD
 
 class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     @IBOutlet weak var tableView: UITableView!
     var movies: [NSDictionary]?
     var endpoint: String!
+    var refreshControl: UIRefreshControl!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         tableView.dataSource = self
         tableView.delegate = self
+        
+        refreshControl = UIRefreshControl()
+        //refreshControl.addTarget(self, action: Selector("didRefresh"), for: UIControlEvents.valueChanged)
+        refreshControl.addTarget(self, action: #selector(MoviesViewController.didRefresh(refreshControl:)), for: UIControlEvents.valueChanged)
+        tableView.insertSubview(refreshControl, at: 0)
         
         // Do any additional setup after loading the view.
         networkRequest()
@@ -38,18 +45,36 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             delegateQueue:OperationQueue.main
         )
         
+        // Display HUD right before the request is made
+        MBProgressHUD.showAdded(to: self.view, animated: true)
+        
         let task : URLSessionDataTask = session.dataTask(with: request,completionHandler: { (dataOrNil, response, error) in
+            
+           
+            
             if let data = dataOrNil {
                 // want it to be used later
                 if let responseDictionary = try! JSONSerialization.jsonObject(with: data, options:[]) as? NSDictionary {
                     print("response: \(responseDictionary)")
                     self.movies = responseDictionary["results"] as? [NSDictionary]
+                    
                     // REMEMBER TO reload data after network requests have been made
                     self.tableView.reloadData()
+                    
+                    // Hide HUD right before the request is made
+                    MBProgressHUD.hide(for: self.view, animated: true)
+                    
+                    self.refreshControl.endRefreshing()
                 }
             }
         });
         task.resume()
+        
+    }
+    
+    func didRefresh(refreshControl: UIRefreshControl) {
+        print("did refresh")
+        networkRequest()
         
     }
 
