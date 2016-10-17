@@ -1,7 +1,7 @@
 # Week1_Flicks
 Codepath Week1 Assignment
 
-**Flick** is an app showing now-playing and top-rated movies. [The Movie Database API](http://docs.themoviedb.apiary.io/#) is used.  
+**MovieViewer** is an app showing now-playing and top-rated movies. [The Movie Database API](http://docs.themoviedb.apiary.io/#) is used.  
 This App was written with Xcode 8 and Swift 3.     
 This is my App Icon:  
 <img src="MovieViewer/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@3x.png" title="App Icon" width="" alt="App Icon" />  
