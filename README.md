@@ -40,7 +40,9 @@ Additional features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='LiceCapGifs/overview.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+
+<img src='LiceCapGifs/network_issue.gif' title='Network Issue' width='' alt='Network Issue' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
