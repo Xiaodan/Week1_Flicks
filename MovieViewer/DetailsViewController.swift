@@ -28,8 +28,11 @@ class DetailsViewController: UIViewController {
         // print(movie)
         let title = movie["title"] as? String
         titleLabel.text = title
+        titleLabel.sizeToFit()
+        
         let overview = movie["overview"] as? String
         overviewLabel.text = overview
+        overviewLabel.sizeToFit()
         
         let posterBaseUrl = "http://image.tmdb.org/t/p/w500"
         

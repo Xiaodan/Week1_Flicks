@@ -13,6 +13,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
 
     @IBOutlet weak var tableView: UITableView!
     var movies: [NSDictionary]?
+    var endpoint: String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,9 +22,15 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         tableView.delegate = self
         
         // Do any additional setup after loading the view.
-
+        networkRequest()
+        
+    }
+    
+    func networkRequest() {
         let apiKey = "99ba63a6d6e90dfbc52007ba9e943a79"
-        let url = URL(string:"http://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)")
+        // print(endpoint)
+        // add an ! to endpoint
+        let url = URL(string:"http://api.themoviedb.org/3/movie/\(endpoint!)?api_key=\(apiKey)")
         let request = URLRequest(url: url!)
         let session = URLSession(
             configuration: .default,
@@ -35,14 +42,15 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             if let data = dataOrNil {
                 // want it to be used later
                 if let responseDictionary = try! JSONSerialization.jsonObject(with: data, options:[]) as? NSDictionary {
-                        print("response: \(responseDictionary)")
-                        self.movies = responseDictionary["results"] as? [NSDictionary]
-                        // REMEMBER TO reload data after network requests have been made
-                        self.tableView.reloadData()
+                    print("response: \(responseDictionary)")
+                    self.movies = responseDictionary["results"] as? [NSDictionary]
+                    // REMEMBER TO reload data after network requests have been made
+                    self.tableView.reloadData()
                 }
             }
         });
         task.resume()
+        
     }
 
     override func didReceiveMemoryWarning() {
