@@ -142,7 +142,11 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
         // cell.textLabel!.text = "row \(indexPath.row)"
         // cell.textLabel!.text = title
-        cell.selectionStyle = .none
+        
+        // cell.selectionStyle = .none
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = UIColor(red: 174/255, green: 242/255, blue: 235/255, alpha: 0.75)
+        cell.selectedBackgroundView = backgroundView
         
         // print("row \(indexPath.row)")
         return cell
