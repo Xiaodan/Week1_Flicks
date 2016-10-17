@@ -68,11 +68,13 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         cell.titleLabel.text = title
         cell.overviewLabel.text = overview
         
+        // safely get images
+        let posterBaseUrl = "http://image.tmdb.org/t/p/w500"
         if let posterPath = movie["poster_path"] as? String {
-            let posterBaseUrl = "http://image.tmdb.org/t/p/w500"
             let posterUrl = NSURL(string: posterBaseUrl + posterPath)
             cell.posterView.setImageWith(posterUrl! as URL)
         }
+            
         else {
             // No poster image. Can either set to nil (no image) or a default movie poster image
             // that you include as an asset
@@ -95,7 +97,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
-        print("prepare for segue called")
+        
+        //print("prepare for segue called")
         let cell = sender as! UITableViewCell
         let indexPath = tableView.indexPath(for: cell)
         let movie = movies![indexPath!.row]
