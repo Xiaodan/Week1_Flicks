@@ -28,13 +28,13 @@ The following **optional** features are implemented:
 * [ ] All images fade in as they are loading.  
 * [ ] For the large poster, load the low-res image first and switch to high-res when complete.  
 * [x] Customize the highlight and selection effect of the cell.  
-* [ ] Customize the navigation bar.  
+* [x] Customize the navigation bar.  
 
 Additional features are implemented:  
 
 * [x] Use Cocoapods.  
 * [x] Asynchronous image downloading implemented using the UIImageView category in the AFNetworking library.  
-* [x] Request time out in 10 seconds.  
+* [x] Request time out in 10 seconds. 
 
 ## Video Walkthrough 
 
